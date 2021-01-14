@@ -10,13 +10,14 @@ import android.util.Log;
 import android.view.View;
 
 import java.io.IOException;
+import java.net.URI;
 
 import static com.hrst.silent_update.Utilities.installPackage;
 import static com.hrst.silent_update.Utilities.validPermissions;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
-    private final String updatePackagePath = "/sdcard/Download/app-update.apk";
+    private final String updatePackageUri = "file:///sdcard/Download/app-debug.apk";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +37,16 @@ public class MainActivity extends AppCompatActivity {
      * @param v Button view
      */
     public void updateApp(View v) {
-        Log.i(TAG, "Updating app...");
-        try {
-            installPackage(this, this.getPackageName(), updatePackagePath);
-        } catch (IOException e) {
-            e.printStackTrace();
+        DevicePolicyManager dpm = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);
+        if (dpm.isDeviceOwnerApp(this.getPackageName())) {
+            Log.i(TAG, "Updating app...");
+            try {
+                installPackage(this, URI.create(updatePackageUri));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.w(TAG, "Not a device admin");
         }
     }
 
