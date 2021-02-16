@@ -1,6 +1,6 @@
 # Silent Update
 
-This sample shows how to update Android app silently without user confirmation using a device owner app. It was tested on temi.
+This sample shows how to update Android app silently without user confirmation using a device owner app.
 
 ## Usage
 1. Build app and install on device
